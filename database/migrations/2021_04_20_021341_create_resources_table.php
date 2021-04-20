@@ -17,7 +17,7 @@ class CreateResourcesTable extends Migration
 
         Schema::create('resources', function (Blueprint $table) {
             $table->id();
-            $table->longText('recommendation');
+            $table->text('recommendation');
             $table->softDeletes();
             $table->timestamps();
         });
