@@ -1,0 +1,70 @@
+models:
+  Models\RiskCategory:
+    name: string unique
+    timestamps: true
+    softDeletes: true
+    relationships:
+      belongsTo: Company
+
+  Models\RiskOwner:
+      name: string
+      timestamps: true
+      softDeletes: true
+      relationships:
+        belongsTo: Company
+
+  Models\Company:
+      risk_category_id: id foreign references:id on:risk_categories nullable
+      risk_owner_id: id foreign references:id on:risk_owners nullable
+      name: string unique
+      timestamps: true
+      softDeletes: true
+      relationships:
+        hasMany: RiskCategory, RiskOwner
+
+  Models\RiskCause:
+      cause: string
+      timestamps: true
+      softDeletes: true
+      relationships:
+        belongsTo: RiskDescription
+        belongsToMany: Mitigation
+
+  Models\Likelihood:
+      level: integer
+      timestamps: true
+      softDeletes: true
+      relationships:
+        belongsTo: RiskDescription
+
+  Models\Impact:
+      level: integer
+      timestamps: true
+      softDeletes: true
+      relationships:
+        belongsTo: RiskDescription
+
+  Models\RiskDescription:
+      risk_cause_id: id foreign references:id on:risk_causes nullable
+      likelihood_id: id foreign references:id on:Likelihood nullable
+      impact_id: id foreign references:id on:Impacts nullable
+      description: text
+      timestamps: true
+      softDeletes: true
+      relationships:
+        hasMany: RiskCause
+        hasOne: Likelihood, Impact
+
+  Models\Mitigation:
+      details: longtext
+      timestamps: true
+      softDeletes: true
+      relationships:
+        belongsToMany: Resource, RiskCause
+
+  Models\Resource:
+      recommendation: longtext
+      timestamps: true
+      softDeletes: true
+      relationships:
+        belongsToMany: Mitigation
